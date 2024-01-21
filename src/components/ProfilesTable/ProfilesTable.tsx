@@ -8,14 +8,14 @@ import {
   getPaginationRowModel,
   ColumnSort,
 } from '@tanstack/react-table';
-import { profilesType } from '@/types/profilesType';
-import { accountsColumnType } from '@/types/accountsColumnType';
+import { ProfilesType } from '@/types/ProfilesType';
+import { ColumnsType } from '@/types/ColumnsType';
 
 interface ExtendedTableOptions {}
 
 type Props = {
-  profiles: profilesType[];
-  profilesColumns: accountsColumnType[];
+  profiles: ProfilesType[];
+  profilesColumns: ColumnsType[];
 };
 
 export const ProfilesTable: React.FC<Props> = ({ profiles, profilesColumns }) => {
@@ -43,7 +43,7 @@ export const ProfilesTable: React.FC<Props> = ({ profiles, profilesColumns }) =>
 
   return (
     <div className='w3-container'>
-      <h1>Accounts-table</h1>
+      <h1>Profiles-table</h1>
       <input
         type='text'
         value={filtering}

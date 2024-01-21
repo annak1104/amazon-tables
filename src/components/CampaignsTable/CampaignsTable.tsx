@@ -8,23 +8,24 @@ import {
   getPaginationRowModel,
   ColumnSort,
 } from '@tanstack/react-table';
-import { AccountsType } from '@/types/AccountsType';
 import { ColumnsType } from '@/types/ColumnsType';
+import { CampaignType } from '@/types/campaignsType';
 
 interface ExtendedTableOptions {}
 
 type Props = {
-  accounts: AccountsType[];
-  accountsColumns: ColumnsType[];
+  campaigns: CampaignType[];
+  campaignsColumns: ColumnsType[];
 };
 
-export const AccountsTable: React.FC<Props> = ({ accounts, accountsColumns }) => {
+export const CampaignsTable: React.FC<Props> = ({ campaigns, campaignsColumns }) => {
+
   const [sorting, setSorting] = useState<ColumnSort[]>([]);
   const [filtering, setFiltering] = useState('');
-
+  
   const table = useReactTable<ExtendedTableOptions>({
-    data: accounts,
-    columns: accountsColumns.map((column) => ({
+    data: campaigns,
+    columns: campaignsColumns.map((column) => ({
       accessorKey: column.accessorKey,
     })),
     getCoreRowModel: getCoreRowModel(),
@@ -41,7 +42,7 @@ export const AccountsTable: React.FC<Props> = ({ accounts, accountsColumns }) =>
 
   return (
     <div className='w3-container'>
-      <h1>Accounts-table</h1>
+      <h1>Campaigns-table</h1>
       <input
         type='text'
         value={filtering}

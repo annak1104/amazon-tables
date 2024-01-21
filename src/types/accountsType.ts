@@ -1,4 +1,4 @@
-export type accountsType = {
+export type AccountsType = {
     accountId: number,
     email: string,
     authToken: string,
