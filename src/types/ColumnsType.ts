@@ -1,4 +1,4 @@
-export type accountsColumnType = {
+export type ColumnsType = {
   header: string;
   accessorKey: string;
 };
