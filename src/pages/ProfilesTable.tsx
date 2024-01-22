@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   useReactTable,
   getCoreRowModel,
@@ -10,22 +10,36 @@ import {
 } from '@tanstack/react-table';
 import { ProfilesType } from '@/types/ProfilesType';
 import { ColumnsType } from '@/types/ColumnsType';
+import { Link, useParams } from 'react-router-dom';
 
-interface ExtendedTableOptions {}
+interface ExtendedTableOptions {
+  profileId: number;
+}
 
 type Props = {
-  profiles: ProfilesType[];
+  allProfiles: ProfilesType[]; // Pass all profiles as a prop
   profilesColumns: ColumnsType[];
 };
 
-export const ProfilesTable: React.FC<Props> = ({ profiles, profilesColumns }) => {
-
+export const ProfilesTable: React.FC<Props> = ({ allProfiles, profilesColumns }) => {
   const [sorting, setSorting] = useState<ColumnSort[]>([]);
   const [filtering, setFiltering] = useState('');
-  
-  console.log(profiles);
+
+  const { accountId } = useParams();
+
+  // Function to filter profiles based on accountId
+  const filterProfilesByAccountId = (profiles: ProfilesType[]) => {
+    return profiles.filter(profile => profile.accountId === Number(accountId));
+  };
+
+  // Memoized filtered profiles based on accountId
+  const filteredProfiles = useMemo(() => filterProfilesByAccountId(allProfiles), [
+    allProfiles,
+    accountId,
+  ]);
+
   const table = useReactTable<ExtendedTableOptions>({
-    data: profiles,
+    data: filteredProfiles, // Use the filtered profiles
     columns: profilesColumns.map((column) => ({
       accessorKey: column.accessorKey,
     })),
@@ -48,6 +62,7 @@ export const ProfilesTable: React.FC<Props> = ({ profiles, profilesColumns }) =>
         type='text'
         value={filtering}
         onChange={(e) => setFiltering(e.target.value)}
+        style={{ marginBottom: '10px' }}
       />
       <table className='w3-table-all'>
         <thead>
@@ -57,13 +72,14 @@ export const ProfilesTable: React.FC<Props> = ({ profiles, profilesColumns }) =>
                 <th
                   key={header.id}
                   onClick={header.column.getToggleSortingHandler()}
+                  style={{ cursor: 'pointer' }}
                 >
                   {header.isPlaceholder ? null : (
                     <div>
                       {flexRender(
                         header.column.columnDef.header,
                         header.getContext()
-                        )}
+                      )}
                       {
                         { asc: '🔼', desc: '🔽' }[
                           header.column.getIsSorted() ?? null
@@ -84,11 +100,18 @@ export const ProfilesTable: React.FC<Props> = ({ profiles, profilesColumns }) =>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
               ))}
+               <td>
+               <Link to={`/account/${accountId}/profile/${row.original.profileId}`}>
+                  View Profile
+                </Link>
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
-      <div>
+      <div
+        style={{ marginTop: '10px' }}
+      >
         <button onClick={() => table.setPageIndex(0)}>First page</button>
         <button
           disabled={!table.getCanPreviousPage()}

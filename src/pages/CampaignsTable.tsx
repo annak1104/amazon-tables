@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   useReactTable,
   getCoreRowModel,
@@ -9,22 +9,34 @@ import {
   ColumnSort,
 } from '@tanstack/react-table';
 import { ColumnsType } from '@/types/ColumnsType';
-import { CampaignType } from '@/types/campaignsType';
+import { CampaignType } from '@/types/CampaignsType';
+import { useParams } from 'react-router-dom';
 
 interface ExtendedTableOptions {}
 
 type Props = {
-  campaigns: CampaignType[];
+  allCampaigns: CampaignType[];
   campaignsColumns: ColumnsType[];
 };
 
-export const CampaignsTable: React.FC<Props> = ({ campaigns, campaignsColumns }) => {
+export const CampaignsTable: React.FC<Props> = ({ allCampaigns, campaignsColumns }) => {
 
   const [sorting, setSorting] = useState<ColumnSort[]>([]);
   const [filtering, setFiltering] = useState('');
   
+  const { profileId } = useParams();
+
+  const filterCampaignsByProfileId = (campaigns: CampaignType[]) => {
+    return campaigns.filter(campaign => campaign.profileId === Number(profileId));
+  };
+
+  const filteredCampaigns = useMemo(() => filterCampaignsByProfileId(allCampaigns), [
+    allCampaigns,
+    profileId,
+  ]);
+
   const table = useReactTable<ExtendedTableOptions>({
-    data: campaigns,
+    data: filteredCampaigns,
     columns: campaignsColumns.map((column) => ({
       accessorKey: column.accessorKey,
     })),
@@ -47,6 +59,7 @@ export const CampaignsTable: React.FC<Props> = ({ campaigns, campaignsColumns })
         type='text'
         value={filtering}
         onChange={(e) => setFiltering(e.target.value)}
+        style={{ marginBottom: '10px' }}
       />
       <table className='w3-table-all'>
         <thead>
@@ -56,13 +69,14 @@ export const CampaignsTable: React.FC<Props> = ({ campaigns, campaignsColumns })
                 <th
                   key={header.id}
                   onClick={header.column.getToggleSortingHandler()}
+                  style={{ cursor: 'pointer' }}
                 >
                   {header.isPlaceholder ? null : (
                     <div>
                       {flexRender(
                         header.column.columnDef.header,
                         header.getContext()
-                        )}
+                      )}
                       {
                         { asc: '🔼', desc: '🔽' }[
                           header.column.getIsSorted() ?? null
@@ -87,7 +101,9 @@ export const CampaignsTable: React.FC<Props> = ({ campaigns, campaignsColumns })
           ))}
         </tbody>
       </table>
-      <div>
+      <div
+        style={{ marginTop: '10px' }}
+      >
         <button onClick={() => table.setPageIndex(0)}>First page</button>
         <button
           disabled={!table.getCanPreviousPage()}
