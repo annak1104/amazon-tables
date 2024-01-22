@@ -11,6 +11,7 @@ import {
 import { ColumnsType } from '@/types/ColumnsType';
 import { CampaignType } from '@/types/CampaignsType';
 import { useParams } from 'react-router-dom';
+import { GoBackButton } from '@/components/Button/Button';
 
 interface ExtendedTableOptions {}
 
@@ -52,9 +53,13 @@ export const CampaignsTable: React.FC<Props> = ({ allCampaigns, campaignsColumns
     onGlobalFilterChange: setFiltering,
   });
 
+  const { accountId } = useParams();
+
+
   return (
     <div className='w3-container'>
       <h1>Campaigns-table</h1>
+      <GoBackButton path={`/account/${accountId}`} />
       <input
         type='text'
         value={filtering}

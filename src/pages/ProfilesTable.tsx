@@ -11,6 +11,7 @@ import {
 import { ProfilesType } from '@/types/ProfilesType';
 import { ColumnsType } from '@/types/ColumnsType';
 import { Link, useParams } from 'react-router-dom';
+import { GoBackButton } from '@/components/Button/Button';
 
 interface ExtendedTableOptions {
   profileId: number;
@@ -58,6 +59,7 @@ export const ProfilesTable: React.FC<Props> = ({ allProfiles, profilesColumns })
   return (
     <div className='w3-container'>
       <h1>Profiles-table</h1>
+      <GoBackButton path="/" />
       <input
         type='text'
         value={filtering}
