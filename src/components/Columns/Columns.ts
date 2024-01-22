@@ -1,21 +1,52 @@
 export const accountsColumns = [
   {
-    accessorKey: 'id',
-    header: 'accountId',
+    header: "ID",
+    accessorKey: "accountId",
   },
-
   {
-    accessorKey: 'email',
-    header: 'email',
+    header: "email",
+    accessorKey: "email",
   },
-
   {
-    accessorKey: 'authToken',
-    header: 'authToken',
+    header: "authToken",
+    accessorKey: "authToken",
   },
-
   {
-    accessorKey: 'creationDate',
-    header: 'creationDate',
+    header: "creationDate",
+    accessorKey: "creationDate",
+  },
+];
+
+export const profilesColumns = [
+  {
+    header: "ID",
+    accessorKey: "profileId",
+  },
+  {
+    header: "country",
+    accessorKey: "country",
+  },
+  {
+    header: "marketplace",
+    accessorKey: "marketplace",
+  },
+];
+
+export const campaignsColumns = [
+  {
+    header: "ID",
+    accessorKey: "campaignId",
+  },
+  {
+    header: "clicks",
+    accessorKey: "clicks",
+  },
+  {
+    header: "cost",
+    accessorKey: "cost",
+  },
+  {
+    header: "date",
+    accessorKey: "date",
   },
 ];

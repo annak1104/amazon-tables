@@ -8,10 +8,13 @@ import {
   getPaginationRowModel,
   ColumnSort,
 } from '@tanstack/react-table';
+import { Link } from 'react-router-dom';
 import { AccountsType } from '@/types/AccountsType';
 import { ColumnsType } from '@/types/ColumnsType';
 
-interface ExtendedTableOptions {}
+interface ExtendedTableOptions {
+  accountId: number;
+}
 
 type Props = {
   accounts: AccountsType[];
@@ -46,6 +49,7 @@ export const AccountsTable: React.FC<Props> = ({ accounts, accountsColumns }) =>
         type='text'
         value={filtering}
         onChange={(e) => setFiltering(e.target.value)}
+        style={{ marginBottom: '10px' }}
       />
       <table className='w3-table-all'>
         <thead>
@@ -55,13 +59,14 @@ export const AccountsTable: React.FC<Props> = ({ accounts, accountsColumns }) =>
                 <th
                   key={header.id}
                   onClick={header.column.getToggleSortingHandler()}
+                  style={{ cursor: 'pointer' }}
                 >
                   {header.isPlaceholder ? null : (
                     <div>
                       {flexRender(
                         header.column.columnDef.header,
                         header.getContext()
-                        )}
+                      )}
                       {
                         { asc: '🔼', desc: '🔽' }[
                           header.column.getIsSorted() ?? null
@@ -82,11 +87,18 @@ export const AccountsTable: React.FC<Props> = ({ accounts, accountsColumns }) =>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
               ))}
+              <td>
+                <Link to={`/account/${row.original.accountId}`}>
+                  View Profile
+                </Link>
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
-      <div>
+      <div
+        style={{ marginTop: '10px' }}
+      >
         <button onClick={() => table.setPageIndex(0)}>First page</button>
         <button
           disabled={!table.getCanPreviousPage()}
